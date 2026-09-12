@@ -1,0 +1,35 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"  
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  phone        String        // Changed from Int to String
+  date         String
+  location     String
+  firstname    String
+  lastname     String
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  isVerified       Boolean   @default(false)
+  verificationCode String?
+  codeExpiresAt    DateTime?
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  starttime DateTime // Changed from String to DateTime
+  endtime   DateTime // Changed from String to DateTime
+  status    String
+  userid    Int
+  user      User     @relation(fields: [userid], references: [id])
+}

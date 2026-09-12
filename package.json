@@ -1,0 +1,40 @@
+{
+  "name": "apoinments-again",
+  "version": "1.0.0",
+  "proxy": "http://localhost:3000",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "postinstall": "prisma skills sync || exit 0",
+    "contract:emit": "prisma contract emit",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "6.19.3",
+    "@prisma/orm-postgres": "^8.0.0-rc.8",
+    "@tailwindcss/vite": "^4.3.3",
+    "bcrypt": "^6.0.0",
+    "bypass": "^0.0.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^10.0.8",
+    "pg": "^8.23.0",
+    "prisma": "6.19.3",
+    "react-router-dom": "^7.18.3",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@prisma/cli-engine": "^0.2.3",
+    "@types/node": "^26.4.0",
+    "nodemon": "^3.1.14"
+  }
+}
