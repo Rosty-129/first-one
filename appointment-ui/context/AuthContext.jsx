@@ -1,26 +1,59 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  // Corrected: useState uses array destructuring [value, setter]
-  const [token, setToken] = useState(() => localStorage.getItem("authtoken"));
+export function AuthProvider({ children }) {
+  const [token, setToken] = useState(localStorage.getItem("authtoken") || null);
+  const [user, setUser] = useState(null);
 
-  const login = (newToken) => {
+  // Helper function to decode JWT payload safely
+  const parseJwt = (tokenStr) => {
+    try {
+      const base64Url = tokenStr.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      return JSON.parse(window.atob(base64));
+    } catch {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      const decoded = parseJwt(token);
+      if (decoded && decoded.exp * 1000 > Date.now()) {
+        setUser(decoded);
+      } else {
+        logout();
+      }
+    } else {
+      setUser(null);
+    }
+  }, [token]);
+
+  const login = (newToken, role) => {
     localStorage.setItem("authtoken", newToken);
     setToken(newToken);
+    const decoded = parseJwt(newToken);
+    setUser(decoded || { role });
   };
 
   const logout = () => {
-    // Corrected: pass string key "authtoken", not variable newtoken
     localStorage.removeItem("authtoken");
     setToken(null);
+    setUser(null);
   };
 
-  // Corrected: return statement must be inside the AuthProvider function
   return (
-    <AuthContext.Provider value={{ login, logout, token, isAuthenticated: !!token }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        isAuthenticated: !!token,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
+}

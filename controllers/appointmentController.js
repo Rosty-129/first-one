@@ -15,7 +15,7 @@ export const createAppointment = async (req, res) => {
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized: Invalid user payload" });
     }
-
+    
     const result = appointmentSchema.safeParse(req.body);
     if (!result.success) {
       return res.status(400).json({

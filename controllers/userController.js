@@ -21,7 +21,7 @@ const getUserId = (req) => {
 // Register new user
 export const createUser = async (req, res) => {
   try {
-    const { firstname, lastname, phone, date, location, email, password } = req.body;
+    const { firstname, lastname, phone, date, role, location, email, password } = req.body;
 
     if (!email || !password || !firstname || !lastname) {
       return res.status(400).json({ message: "Required fields are missing" });
@@ -44,6 +44,7 @@ const codeExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
         phone,
         date: date || null, // Saved directly as String
         location,
+        role,
         email,
         password: hashedPassword,
         isVerified : false,
@@ -125,6 +126,7 @@ export const getProfile = async (req, res) => {
         id: true,
         firstname: true,
         lastname: true,
+        role : true,
         email: true,
         date: true,
         phone: true,

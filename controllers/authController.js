@@ -31,22 +31,23 @@ export const login = async (req, res) => {
   });
 
   if (!user) {
-    return res.status(401).json({ message: "invalid" });
+    return res.status(401).json({ message: "invalid credentials" });
   }
 
   const hashed = await bcrypt.compare(password, user.password);
 
   if (!hashed) {
-    return res.status(401).json({ message: "invalid" });
+    return res.status(401).json({ message: "invalid credentials" });
   }
 
+  // Included `role` in the JWT payload so isAdmin middleware can verify it
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
 
-  res.status(200).json({ token: token });
+  res.status(200).json({ token: token, role: user.role });
 };
 
 export const forgotPassword = async (req, res) => {

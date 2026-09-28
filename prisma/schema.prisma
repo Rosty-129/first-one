@@ -15,6 +15,7 @@ model User {
   phone        String        // Changed from Int to String
   date         String
   location     String
+  role         String
   firstname    String
   lastname     String
   appointments Appointment[]

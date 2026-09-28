@@ -1,33 +1,63 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Home from "../components/home.jsx";
-import Login from "../components/login.jsx";
-import Register from "../components/register.jsx";
-import Dashboard from "../components/Dashboard.jsx";
-import Booking from "../components/booking.jsx";
-import Appointments from "../components/appointments.jsx";
-import Profile from "../components/profile.jsx";
-import { AuthProvider } from "../context/AuthContext.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import Home from "./components/home.jsx";
+import Login from "./components/login.jsx";
+import Register from "./components/register.jsx";
+import Dashboard from "./components/Dashboard.jsx";
+import Booking from "./components/booking.jsx";
+import Profile from "./components/profile.jsx";
+import AdminAppointments from "./components/appointments.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   const [dark, setDark] = useState(true);
 
   return (
     <AuthProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home dark={dark} setDark={setDark} />} />
-        <Route path="/home" element={<Home dark={dark} setDark={setDark} />} />
-        <Route path="/login" element={<Login dark={dark} setDark={setDark} />} />
-        <Route path="/register" element={<Register dark={dark} setDark={setDark} />} />
-        <Route path="/dashboard" element={<Dashboard dark={dark} setDark={setDark} />} />
-        <Route path="/booking" element={<Booking dark={dark} setDark={setDark} />} />
-        <Route path="/appointments/new" element={<Booking dark={dark} setDark={setDark} />} />
-        <Route path="/appointments" element={<Appointments dark={dark} setDark={setDark} />} />
-        <Route path="/profile" element={<Profile dark={dark} setDark={setDark} />} />
-      </Routes>
-    </BrowserRouter>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home dark={dark} setDark={setDark} />} />
+          <Route path="/login" element={<Login dark={dark} setDark={setDark} />} />
+          <Route path="/register" element={<Register dark={dark} setDark={setDark} />} />
+
+          {/* User Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard dark={dark} setDark={setDark} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/booking"
+            element={
+              <ProtectedRoute>
+                <Booking dark={dark} setDark={setDark} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile dark={dark} setDark={setDark} />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Protected Admin Route */}
+          <Route
+            path="/admin/appointments"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <AdminAppointments dark={dark} setDark={setDark} />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 }
