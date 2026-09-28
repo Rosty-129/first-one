@@ -1,5 +1,9 @@
 import express from "express";
-import { isAdmin, verify } from "../middleware.js";
+
+// Import directly from your two separate middleware files
+import verify from "../middleware/verify.js";
+import isAdmin from "../middleware/isadmin.js";
+
 import {
   allapplications,
   aprove,
